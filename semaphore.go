@@ -1,4 +1,4 @@
-package csemaphore // import "github.com/srajaa/go-classical-semaphore/csemaphore"
+package csemaphore // "github.com/srajaa/go-classicalsemaphore/csemaphore"
 
 import "sync"
 
