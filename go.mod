@@ -1,1 +1,1 @@
-module github.com/go-classicalsemaphore
+module github.com/srajaa/go-classicsemaphore
