@@ -48,7 +48,7 @@ func Test_ProdConsumer(t *testing.T) {
 	for i := 0; i < 200; i++ {
 		<-barrierCh
 	}
-	if it.count != 0 {
+	if it.count != 0 || len(s.waiters) > 0 {
 		t.Error("Semaphore test failed")
 	}
 	for i := 0; i < 100; i++ {
@@ -60,7 +60,7 @@ func Test_ProdConsumer(t *testing.T) {
 	for i := 0; i < 200; i++ {
 		<-barrierCh
 	}
-	if it.count != 0 {
+	if it.count != 0 || len(s.waiters) > 0 {
 		t.Error("Semaphore test failed")
 	}
 }

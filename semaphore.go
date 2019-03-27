@@ -6,7 +6,7 @@ import "sync"
 //should be ready to go, or it can be initialized
 //with a positive count
 type CSemaphore struct {
-	count   uint64
+	Count   uint64
 	mutex   sync.Mutex
 	waiters [](chan int)
 }
@@ -15,14 +15,14 @@ type CSemaphore struct {
 //or just goes through
 func (s *CSemaphore) P() {
 	s.mutex.Lock()
-	if s.count != 0 && len(s.waiters) > 0 {
+	if s.Count != 0 && len(s.waiters) > 0 {
 		panic("Unexpected state")
 	}
-	if s.count < 0 {
+	if s.Count < 0 {
 		panic("Unexpected state")
 	}
-	if s.count > 0 {
-		s.count--
+	if s.Count > 0 {
+		s.Count--
 		s.mutex.Unlock()
 		return
 	}
@@ -36,10 +36,10 @@ func (s *CSemaphore) P() {
 //or just increments the count
 func (s *CSemaphore) V() {
 	s.mutex.Lock()
-	if s.count != 0 && len(s.waiters) > 0 {
+	if s.Count != 0 && len(s.waiters) > 0 {
 		panic("Unexpected state")
 	}
-	if s.count < 0 {
+	if s.Count < 0 {
 		panic("Unexpected state")
 	}
 	if len(s.waiters) > 0 {
@@ -49,6 +49,6 @@ func (s *CSemaphore) V() {
 		waiter <- 1
 		return
 	}
-	s.count++
+	s.Count++
 	s.mutex.Unlock()
 }
