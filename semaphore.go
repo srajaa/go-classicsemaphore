@@ -6,7 +6,7 @@ import "sync"
 //should be ready to go, or it can be initialized
 //with a positive count
 type CSemaphore struct {
-	Count   uint64
+	Count   int64
 	mutex   sync.Mutex
 	waiters [](chan int)
 }

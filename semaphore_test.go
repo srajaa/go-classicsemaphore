@@ -14,7 +14,7 @@ type itemsstruct struct {
 func producer(it *itemsstruct, s *CSemaphore, barrierCh chan int) {
 	it.mutex.Lock()
 	it.count++
-	if it.count > 100 {
+	if it.count > 10000 {
 		panic("bad count")
 	}
 	log.Println("Produced", it.count)
@@ -36,28 +36,28 @@ func consumer(it *itemsstruct, s *CSemaphore, barrierCh chan int) {
 }
 
 func Test_ProdConsumer(t *testing.T) {
-	barrierCh := make(chan int, 200)
+	barrierCh := make(chan int, 20000)
 	it := itemsstruct{}
 	s := CSemaphore{}
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10000; i++ {
 		go producer(&it, &s, barrierCh)
 	}
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10000; i++ {
 		go consumer(&it, &s, barrierCh)
 	}
-	for i := 0; i < 200; i++ {
+	for i := 0; i < 20000; i++ {
 		<-barrierCh
 	}
 	if it.count != 0 || len(s.waiters) > 0 {
 		t.Error("Semaphore test failed")
 	}
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10000; i++ {
 		go consumer(&it, &s, barrierCh)
 	}
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10000; i++ {
 		go producer(&it, &s, barrierCh)
 	}
-	for i := 0; i < 200; i++ {
+	for i := 0; i < 20000; i++ {
 		<-barrierCh
 	}
 	if it.count != 0 || len(s.waiters) > 0 {
